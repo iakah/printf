@@ -1,90 +1,66 @@
 #include "main.h"
 
-int write_print(mk_buffer container, va_list args);
+void print_buffer(char buffer[], int *buff_ind);
 
 /**
- * _printf - Creates a buffer and writes that buffer to standard output
- * @format: the string to be printed, may contain conversion specifiers
- * which placehold for other data types to be printed
- *
- * Return: The number of characters printed.
+ * _printf - Printf function
+ * @format: format.
+ * Return: Printed chars.
  */
 int _printf(const char *format, ...)
 {
-	va_list args;
-	mk_buffer container;
+	int i, printed = 0, printed_chars = 0;
+	int flags, width, precision, size, buff_ind = 0;
+	va_list list;
+	char buffer[BUFF_SIZE];
 
-	check_null(format);
-	container = create_buffer(container);
-	va_start(args, format);
-	while (*format)
+	if (format == NULL)
+		return (-1);
+
+	va_start(list, format);
+
+	for (i = 0; format && format[i] != '\0'; i++)
 	{
-		if (*format == '%' && get_format(format + 1))
+		if (format[i] != '%')
 		{
-			if (!(get_format(format + 1)))
-			{
-				container = add_buff(container, args, format, 0);
-					format++;
-				continue;
-			}
-			while (*(format + 1) == ' ')
-				format++;
-			if (*(format + 1) == '\0')
-			{
-				format++;
-				continue;
-			}
-			else if (*(format + 1) == '\n' && *format == '%')
-			{
-				container = add_buff(container, args, 0, '%');
-				format++;
-				continue;
-			}
-			if (*(format + 1) && !(get_format(format + 1)))
-			{
-				container = add_buff(container, args, 0, '%');
-				container = add_buff(container, args, format, 0);
-				format++;
-				continue;
-			}
-			else if (*format == ' ')
-				container = add_buff(container, args, format, 0);
-			format++;
-			container = get_format(format)(container, args);
-		}
-		else if (*format == '%' && *(format + 1) == '\0')
-		{
-			write(1, container.start, container.size);
-			free(container.start);
-			va_end(args);
-
-			return (-1);
+			buffer[buff_ind++] = format[i];
+			if (buff_ind == BUFF_SIZE)
+				print_buffer(buffer, &buff_ind);
+			/* write(1, &format[i], 1);*/
+			printed_chars++;
 		}
 		else
 		{
-			if (*(format + 1) == '%' && *format == '%')
-				format++;
-			*container.box = *format;
-			container.size += 1;
+			print_buffer(buffer, &buff_ind);
+			flags = get_flags(format, &i);
+			width = get_width(format, &i, list);
+			precision = get_precision(format, &i, list);
+			size = get_size(format, &i);
+			++i;
+			printed = handle_print(format, &i, list, buffer,
+				flags, width, precision, size);
+			if (printed == -1)
+				return (-1);
+			printed_chars += printed;
 		}
-		container.box++;
-		format++;
 	}
-	return (write_print(container, args));
+
+	print_buffer(buffer, &buff_ind);
+
+	va_end(list);
+
+	return (printed_chars);
 }
 
 /**
- * write_print - Writes and frees the buffer to standard output
- * @container: the string to be printed, may contain conversion specifiers
- * which placehold for other data types to be printed
- * @args: the args
- * Return: The number of characters printed.
+ * print_buffer - Prints the contents of the buffer if it exist
+ * @buffer: Array of chars
+ * @buff_ind: Index at which to add next char, represents the length.
  */
-int write_print(mk_buffer container, va_list args)
+void print_buffer(char buffer[], int *buff_ind)
 {
-	write(1, container.start, container.size);
-	free(container.start);
-	va_end(args);
+	if (*buff_ind > 0)
+		write(1, &buffer[0], *buff_ind);
 
-	return (container.size);
+	*buff_ind = 0;
 }
