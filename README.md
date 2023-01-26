@@ -1,142 +1,37 @@
-# Printf
-Our first collaborative project at main School, The printf project
-is a Low-Level Programming project writen in C language.
+﻿# _printf  
+![enter image description here](https://i.imgur.com/y79WiDr.png) 
+That is the prototype for this implementation(_printf). As you can see, this prototype is an implementation of the **printf standard function** and **variadic function** .  ## What is printf? "Writes the C string pointed by _format_ to the standard output ([stdout](http://www.cplusplus.com/stdout))" - [cplusplus](http://www.cplusplus.com/reference/cstdio/printf/) 
 
+In other words, the function receives a format (*const char* **format*) and a list of arguments (the magic of variadic functions). So printf inside, take the string format and search for specific patterns, then the pattern that was found it is passed to other function that prints the match pattern  
 
-## Table of Context
-<!-- toc -->
+### Patterns 
 
-- [Files](#Files)
-- [change log](#change-log)
-  * [0.0.1 - 2018-19-10](#001---2018-19-10)
-- [Authors](#Authors)
+![enter image description here](https://i.imgur.com/vmU0FhC.png) 	
+ [cplusplus](http://www.cplusplus.com/reference/cstdio/printf)  
 
-<!-- tocstop -->
-# Files
+That image shows specifiers that we can use in the printf.  In this case, _printf just allow specifiers like   
+|Specifiers|Functions|Description| 
+|--|--|--|
+|s|print_string|print a string| 
+|c|print_char|print just a char| 
+|i|print_integer|print a number in base 10|
+|d|print_integer|print a number in base 10|
+|p|print_pointer|print a memory address in base 16 lowercase| 
+|b|print_binary|print a number in base 2|
+|x|print_hexadecimal_low|print a number in base 16 lowercase| 
+|X|print_hexadecimal_upp|print a number in base 16 uppercase|
+|o|print_octal|print a number in base 8| 
+|R|print_rot|print a string encoded in rot13 format| 
 
-|          Goto          | Files                                          | Description                                                  |
-| :--------------------: | :--------------------------------------------- | ------------------------------------------------------------ |
-|      [📌](#printf)      | [printf.c](./printf.c)                         | Entry point for the `printf`.                                |
-|                        | [main.h](./main.c)                   | Header files for the the whole project.                      |
-|                        | [global_definitions.h](./global-definitions.h) | Header file that defines macro for `NULL`, `True`, and `False`. |
-|      [📌](#opidc)       | [opid.c](./opid.c)                             | Contains the functions for handling the function pointers.   |
-|   [📌](#buffer_intc)    | [buffer_int.c](./buffer_int.c)                 | Contains function to `Allocate` and `free` a `Buffer`.       |
-|   [📌](#buffer_opsc)    | [buffer_ops.c](./buffer_ops.c)                 | Contains functions related to the buffer.                    |
-|   [📌](#buffer_ops2c)   | [buffer_ops2.c](./buffer_ops2.c)               | Contains functions related to the buffer.                    |
-| [📌](#write_op_funcsc)  | [write_op_funcs.c](./write_op_funcs.c)         | Contains functions related to writing out the `Buffer` to `STDOUT`. |
-| [📌](#write_op2_funcsc) | [write_op2_funcs.c](write_op2_funcs.c)         | Contains a function that converts binary into base 10 number. |
+## Flowcharts
 
+These 3 functions are the bases for this project:
 
+ 1. Printf: Is the frontend of all the algorithm, so is the prototype, and just receive the variables
+ 2. Handler: Is the controller for the string and the formats, and also does the counter for the numbers of bytes that are printing
+ 3. Percent handler: Compare a list of possible specifiers with the current pattern, and return the corresponding function
 
-## Printf
-
-file: [printf.c](./printf.c)
-
-| Function | Details                                               |
-| -------: | ----------------------------------------------------- |
-|  _printf | prints any string with certain flags for modification |
-
-
-
-[back to files](#Files)
-
-
-
-## opid.c
-
-file: [opid.c](./opid.c)
-
-
-| Function | Details                                  |
-| -------: | ---------------------------------------- |
-|     opid | opid - scans src string for an operator. |
-
-
-
-[back to files](#Files)
-
-## buffer_int.c  
-
-file: [buffer_int.c](./buffer_int.c)  
-
-
-|   Function | Details                                                      |
-| ---------: | ------------------------------------------------------------ |
-|    buf_new | Function that create a `Buffer` `struct` at a default size of 1024 |
-| buf_custom | Function for create a `Buffer` `struct` with a custom size   |
-|    buf_end | frees `buffer` structure                                     |
-
-
-[back to files](#Files)
-
-## buffer_ops.c  
-
-file: [buffer_ops.c](./buffer_ops.c)  
-
-
-|    Function | Details                                    |
-| ----------: | ------------------------------------------ |
-|    buf_size | get the size                               |
-|   buf_index | gets the current index of                  |
-| buf_content | creates a copy of the buffer str field     |
-|   buf_write | writes out the `buffer` string to `stdout` |
-|      buf_wr | writes and reset the `buffer` string       |
-
-[back to files](#Files)
-
-
-
-## buffer_ops2.c 
-
-file: [buffer_ops2.c](./buffer_ops2.c)  
-
-
-| Function | Details                            |
-| -------: | ---------------------------------- |
-|  buf_inc | increment both index and overflow. |
-
-[back to files](#Files)
-
-## write_op_funcs.c 
-
-file: [write_op_funcs.c](./write_op_funcs.c)
-
-
-|   Function | Details                                      |
-| ---------: | -------------------------------------------- |
-| write_char | write a character to buffer                  |
-|  write_str | writes a string to buffer                    |
-|  write_mod | write a modulus symbol                       |
-|  write_int | write integer to the buffer                  |
-| append_num | Appends a number as an integer to the buffer |
-
-
-
-[back to files](#Files)
-
-## write_op2_funcs.c 
-
-file: [write_op2_funcs.c](./write_op2_funcs.c)
-
-
-|  Function | Details                    |
-| --------: | -------------------------- |
-| write_bin | convert a digit to binary. |
-
-
-
-[back to files](#Files)
-
-
-# change log
-
-## 0.0.1 - 2018-19-10
-- add Martin Branch
-- Git flow initialized to this project.
-
-
-
-# Authors
-
-- Martin Smith - [Github](http://github.com/Ostoyae) , [Twitter](https://twitter.com/@_Ostoyae)
-- Samie Azad - [Github](https://github.com/sazad44), 
+![enter image description here](https://i.imgur.com/SjqIUs7.png) ![enter image description here](https://i.imgur.com/ouUh2G4.png)
+![enter image description here](https://i.imgur.com/90TRtGH.png) 
+## Contributors  
+[@Jose Parrales - Github](https://github.com/JParrales) - [@David Orozco - Github](https://github.com/davixcky)  
